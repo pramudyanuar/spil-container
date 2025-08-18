@@ -1,19 +1,15 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LandingPage } from "@/pages/landing";
 import { ProductsPage } from "@/pages/products";
 import { ContainersTrucksPage } from "@/pages/containers-trucks";
 import { StuffingResultPage } from "@/pages/stuffing-result";
+import { useCurrentStep, useShowLanding, useAppActions } from "@/hooks/useAppState";
+import { stepConfiguration } from "@/constants/app";
 
 function Stepper() {
-  const [showLanding, setShowLanding] = useState(true);
-  const [step, setStep] = useState(1);
-
-  const steps = [
-    { id: 1, label: "Products" },
-    { id: 2, label: "Containers & Trucks" },
-    { id: 3, label: "Stuffing Result" },
-  ];
+  const currentStep = useCurrentStep();
+  const showLanding = useShowLanding();
+  const { setStep, setShowLanding } = useAppActions();
 
   const handleGetStarted = () => {
     setShowLanding(false);
@@ -24,8 +20,16 @@ function Stepper() {
     setStep(1);
   };
 
+  const handleNextStep = () => {
+    setStep(Math.min(currentStep + 1, stepConfiguration.length));
+  };
+
+  const handlePrevStep = () => {
+    setStep(Math.max(currentStep - 1, 1));
+  };
+
   const renderStepContent = () => {
-    switch (step) {
+    switch (currentStep) {
       case 1:
         return <ProductsPage />;
       case 2:
@@ -45,28 +49,28 @@ function Stepper() {
     <div className="flex flex-col space-y-8">
       {/* Step indicators */}
       <div className="flex items-center justify-center space-x-4 md:space-x-8">
-        {steps.map((s, index) => (
-          <div key={s.id} className="flex items-center">
+        {stepConfiguration.map((step, index) => (
+          <div key={step.id} className="flex items-center">
             <div className="flex flex-col items-center">
               <div
                 className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-200 
-                ${step >= s.id 
+                ${currentStep >= step.id 
                   ? "border-primary bg-primary text-primary-foreground" 
                   : "border-muted-foreground bg-background text-muted-foreground"
                 }`}
               >
-                {s.id}
+                {step.id}
               </div>
               <span className={`mt-2 text-xs font-medium text-center max-w-20 md:max-w-none ${
-                step >= s.id ? "text-primary" : "text-muted-foreground"
+                currentStep >= step.id ? "text-primary" : "text-muted-foreground"
               }`}>
-                {s.label}
+                {step.label}
               </span>
             </div>
-            {index !== steps.length - 1 && (
+            {index !== stepConfiguration.length - 1 && (
               <div
                 className={`h-0.5 w-8 md:w-16 mx-4 transition-all duration-200 ${
-                  step > s.id ? "bg-primary" : "bg-muted"
+                  currentStep > step.id ? "bg-primary" : "bg-muted"
                 }`}
               />
             )}
@@ -91,17 +95,17 @@ function Stepper() {
           </Button>
           <Button
             variant="outline"
-            onClick={() => setStep((prev) => Math.max(prev - 1, 1))}
-            disabled={step === 1}
+            onClick={handlePrevStep}
+            disabled={currentStep === 1}
           >
             Back
           </Button>
         </div>
         <Button
-          onClick={() => setStep((prev) => Math.min(prev + 1, steps.length))}
-          disabled={step === steps.length}
+          onClick={handleNextStep}
+          disabled={currentStep === stepConfiguration.length}
         >
-          {step === steps.length ? "Complete" : "Next"}
+          {currentStep === stepConfiguration.length ? "Complete" : "Next"}
         </Button>
       </div>
     </div>
