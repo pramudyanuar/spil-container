@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { LandingPage } from "@/pages/landing";
 import { ProductsPage } from "@/pages/products";
 import { ContainersTrucksPage } from "@/pages/containers-trucks";
 import { StuffingResultPage } from "@/pages/stuffing-result";
 
 function Stepper() {
+  const [showLanding, setShowLanding] = useState(true);
   const [step, setStep] = useState(1);
 
   const steps = [
@@ -12,6 +14,15 @@ function Stepper() {
     { id: 2, label: "Containers & Trucks" },
     { id: 3, label: "Stuffing Result" },
   ];
+
+  const handleGetStarted = () => {
+    setShowLanding(false);
+  };
+
+  const handleBackToLanding = () => {
+    setShowLanding(true);
+    setStep(1);
+  };
 
   const renderStepContent = () => {
     switch (step) {
@@ -25,6 +36,10 @@ function Stepper() {
         return <ProductsPage />;
     }
   };
+
+  if (showLanding) {
+    return <LandingPage onGetStarted={handleGetStarted} />;
+  }
 
   return (
     <div className="flex flex-col space-y-8">
@@ -66,13 +81,22 @@ function Stepper() {
 
       {/* Navigation buttons */}
       <div className="flex justify-between items-center max-w-4xl mx-auto w-full">
-        <Button
-          variant="outline"
-          onClick={() => setStep((prev) => Math.max(prev - 1, 1))}
-          disabled={step === 1}
-        >
-          Back
-        </Button>
+        <div className="flex space-x-2">
+          <Button
+            variant="ghost"
+            onClick={handleBackToLanding}
+            className="text-muted-foreground"
+          >
+            ← Landing
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setStep((prev) => Math.max(prev - 1, 1))}
+            disabled={step === 1}
+          >
+            Back
+          </Button>
+        </div>
         <Button
           onClick={() => setStep((prev) => Math.min(prev + 1, steps.length))}
           disabled={step === steps.length}
