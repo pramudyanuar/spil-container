@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useContainerOperations } from '@/hooks/useContainerOperations'
 import { useGroups } from '@/hooks/useAppState'
+import { Container3D } from '@/components/visualization/Container3D'
+import { ProductLegend } from '@/components/visualization/ProductLegend'
 import type { Container } from '@/types/container'
+import type { Product, ProductType } from '@/types/product'
 
 interface ContainerResultProps {
   container: Container
@@ -48,6 +51,9 @@ function ContainerResult({ container, utilization, assignedProducts }: Container
 export function StuffingResultPage() {
   const groups = useGroups()
   const { stuffingResult, calculateOptimization, getContainerById } = useContainerOperations()
+
+  // Get all products from groups
+  const allProducts = groups.flatMap(group => group.products)
 
   useEffect(() => {
     if (groups.length > 0 && !stuffingResult) {
@@ -105,6 +111,7 @@ export function StuffingResultPage() {
               key={index}
               assignment={assignment}
               getContainerById={getContainerById}
+              allProducts={allProducts}
             />
           ))}
         </div>
@@ -124,9 +131,10 @@ interface ContainerAssignmentProps {
     }>
   }
   getContainerById: (id: string) => Promise<Container | null>
+  allProducts: Product[]
 }
 
-function ContainerAssignment({ assignment, getContainerById }: ContainerAssignmentProps) {
+function ContainerAssignment({ assignment, getContainerById, allProducts }: ContainerAssignmentProps) {
   const [container, setContainer] = useState<Container | null>(null)
 
   useEffect(() => {
@@ -135,9 +143,36 @@ function ContainerAssignment({ assignment, getContainerById }: ContainerAssignme
 
   if (!container) return null
 
-  return <ContainerResult 
-    container={container} 
-    utilization={assignment.utilization}
-    assignedProducts={assignment.assignedProducts}
-  />
+  // Get unique product types for this container's legend
+  const assignedProductIds = assignment.assignedProducts.map(ap => ap.productId)
+  const assignedProductsData = allProducts.filter(p => assignedProductIds.includes(p.id))
+  const containerProductTypes: ProductType[] = [...new Set(assignedProductsData.map(p => p.type))]
+
+  return (
+    <div className="space-y-4">
+      <ContainerResult 
+        container={container} 
+        utilization={assignment.utilization}
+        assignedProducts={assignment.assignedProducts}
+      />
+      
+      {/* 3D Visualization */}
+      <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+        <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-4">3D Packing Visualization</h4>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div className="lg:col-span-3">
+            <Container3D
+              container={container}
+              assignment={assignment}
+              products={allProducts}
+            />
+          </div>
+          <div className="lg:col-span-1">
+            <ProductLegend productTypes={containerProductTypes} />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
