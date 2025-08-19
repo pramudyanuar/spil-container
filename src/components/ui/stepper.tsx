@@ -3,25 +3,58 @@ import { LandingPage } from "@/pages/landing";
 import { ProductsPage } from "@/pages/products";
 import { ContainersTrucksPage } from "@/pages/containers-trucks";
 import { StuffingResultPage } from "@/pages/stuffing-result";
-import { useCurrentStep, useShowLanding, useAppActions } from "@/hooks/useAppState";
+import { useCurrentStep, useShowLanding, useGroups, useAppActions } from "@/hooks/useAppState";
 import { stepConfiguration } from "@/constants/app";
 
 function Stepper() {
   const currentStep = useCurrentStep();
   const showLanding = useShowLanding();
+  const groups = useGroups();
   const { setStep, setShowLanding } = useAppActions();
 
   const handleGetStarted = () => {
     setShowLanding(false);
   };
 
-  const handleBackToLanding = () => {
-    setShowLanding(true);
-    setStep(1);
+  // Validation function for step 1 (Products)
+  const canProceedFromStep1 = () => {
+    // Must have at least 1 group
+    if (groups.length === 0) return false;
+    
+    // Each group must have at least 1 product
+    return groups.every(group => group.products.length > 0);
   };
 
+  const canProceedFromCurrentStep = () => {
+    switch (currentStep) {
+      case 1:
+        return canProceedFromStep1();
+      default:
+        return true;
+    }
+  };
+
+  const getValidationMessage = () => {
+    if (currentStep === 1) {
+      if (groups.length === 0) {
+        return "Please add at least one product group to continue.";
+      }
+      if (!groups.every(group => group.products.length > 0)) {
+        return "Each group must have at least one product to continue.";
+      }
+    }
+    return "";
+  };
+
+  // const handleBackToLanding = () => {
+  //   setShowLanding(true);
+  //   setStep(1);
+  // };
+
   const handleNextStep = () => {
-    setStep(Math.min(currentStep + 1, stepConfiguration.length));
+    if (canProceedFromCurrentStep()) {
+      setStep(Math.min(currentStep + 1, stepConfiguration.length));
+    }
   };
 
   const handlePrevStep = () => {
@@ -84,29 +117,34 @@ function Stepper() {
       </div>
 
       {/* Navigation buttons */}
-      <div className="flex justify-between items-center max-w-4xl mx-auto w-full">
-        <div className="flex space-x-2">
+      <div className="flex flex-col space-y-4 max-w-4xl mx-auto w-full">
+        {/* Validation message */}
+        {!canProceedFromCurrentStep() && getValidationMessage() && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
+            <p className="text-amber-800 text-sm font-medium">
+              {getValidationMessage()}
+            </p>
+          </div>
+        )}
+        
+        <div className="flex justify-between items-center">
+          <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              onClick={handlePrevStep}
+              disabled={currentStep === 1}
+            >
+              Back
+            </Button>
+          </div>
           <Button
-            variant="ghost"
-            onClick={handleBackToLanding}
-            className="text-muted-foreground"
+            onClick={handleNextStep}
+            disabled={currentStep === stepConfiguration.length || !canProceedFromCurrentStep()}
+            className={!canProceedFromCurrentStep() ? "opacity-50 cursor-not-allowed" : ""}
           >
-            ← Landing
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handlePrevStep}
-            disabled={currentStep === 1}
-          >
-            Back
+            {currentStep === stepConfiguration.length ? "Complete" : "Next"}
           </Button>
         </div>
-        <Button
-          onClick={handleNextStep}
-          disabled={currentStep === stepConfiguration.length}
-        >
-          {currentStep === stepConfiguration.length ? "Complete" : "Next"}
-        </Button>
       </div>
     </div>
   );

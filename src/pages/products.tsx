@@ -2,9 +2,7 @@ import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ProductsHeader } from '@/components/products/ProductsHeader'
 import { ProductGroupComponent } from '@/components/products/ProductGroupComponent'
-import { PalletsOption } from '@/components/products/PalletsOption'
 import { useProductOperations } from '@/hooks/useProductOperations'
-import { useUsePallets, useAppActions } from '@/hooks/useAppState'
 
 export function ProductsPage() {
   const {
@@ -13,6 +11,7 @@ export function ProductsPage() {
     loadGroups,
     addGroup,
     deleteGroup,
+    updateGroup,
     addProduct,
     updateProduct,
     deleteProduct,
@@ -20,13 +19,11 @@ export function ProductsPage() {
     exportGroups,
     importGroups
   } = useProductOperations()
-  
-  const usePallets = useUsePallets()
-  const { setUsePallets } = useAppActions()
 
   useEffect(() => {
     loadGroups()
-  }, [loadGroups])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleImport = () => {
     const input = document.createElement('input')
@@ -60,7 +57,7 @@ export function ProductsPage() {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 px-8 py-6 max-w-6xl mx-auto">
       <ProductsHeader
         onAddGroup={addGroup}
         onExport={exportGroups}
@@ -69,27 +66,24 @@ export function ProductsPage() {
       />
 
       {/* Groups */}
-      {groups.map((group) => (
-        <div key={group.id} className="space-y-4">
+      <div className="space-y-6">
+        {groups.map((group) => (
           <ProductGroupComponent
+            key={group.id}
             group={group}
             onDeleteGroup={deleteGroup}
+            onUpdateGroup={updateGroup}
             onAddProduct={addProduct}
             onUpdateProduct={updateProduct}
             onDeleteProduct={deleteProduct}
             onDuplicateProduct={duplicateProduct}
           />
-          
-          <PalletsOption
-            usePallets={usePallets}
-            onUsePalletsChange={setUsePallets}
-          />
-        </div>
-      ))}
+        ))}
+      </div>
 
       {groups.length === 0 && !isLoading && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">No product groups found</p>
+        <div className="text-center py-16 border rounded-lg">
+          <p className="text-muted-foreground mb-4 text-lg">No product groups found</p>
           <Button onClick={addGroup} className="bg-blue-500 hover:bg-blue-600">
             Add Your First Group
           </Button>

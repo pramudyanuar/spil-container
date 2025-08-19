@@ -1,6 +1,6 @@
 export interface Product {
   id: string
-  type: 'box' | 'sack' | 'big-bag'
+  type: 'box' | 'big-bag' | 'sack' | 'barrel' | 'roll'
   name: string
   length: number
   width: number
@@ -17,4 +17,4 @@ export interface ProductGroup {
   products: Product[]
 }
 
-export type ProductType = 'box' | 'sack' | 'big-bag'
+export type ProductType = 'box' | 'big-bag' | 'sack' | 'barrel' | 'roll'

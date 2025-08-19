@@ -1,10 +1,20 @@
-import { Package, ShoppingBag } from 'lucide-react'
+import { Package, ShoppingBag, Drum, Cylinder } from 'lucide-react'
 import type { ProductType } from '@/types/product'
 
 export const productTypeIcons: Record<ProductType, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
   box: Package,
+  'big-bag': ShoppingBag,
   sack: ShoppingBag,
-  'big-bag': ShoppingBag
+  barrel: Drum,
+  roll: Cylinder
+}
+
+export const productTypeLabels: Record<ProductType, string> = {
+  box: 'Box',
+  'big-bag': 'Big Bags',
+  sack: 'Sacks',
+  barrel: 'Barrels',
+  roll: 'Roll'
 }
 
 export const colorOptions = [

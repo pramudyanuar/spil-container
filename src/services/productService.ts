@@ -2,48 +2,6 @@ import type { Product, ProductGroup } from '@/types/product'
 
 // Mock data - replace with actual API calls
 const mockGroups: ProductGroup[] = [
-  {
-    id: '1',
-    name: 'Group #1',
-    products: [
-      {
-        id: '1',
-        type: 'box',
-        name: 'Boxes 1',
-        length: 500,
-        width: 400,
-        height: 300,
-        weight: 10,
-        quantity: 80,
-        color: '#22c55e',
-        canStack: true
-      },
-      {
-        id: '2', 
-        type: 'sack',
-        name: 'Sacks',
-        length: 1000,
-        width: 450,
-        height: 300,
-        weight: 45,
-        quantity: 100,
-        color: '#ec4899',
-        canStack: true
-      },
-      {
-        id: '3',
-        type: 'big-bag',
-        name: 'Big bags',
-        length: 1000,
-        width: 1000,
-        height: 1000,
-        weight: 900,
-        quantity: 10,
-        color: '#3b82f6',
-        canStack: true
-      }
-    ]
-  }
 ]
 
 class ProductService {

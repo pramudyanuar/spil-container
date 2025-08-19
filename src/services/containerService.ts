@@ -6,7 +6,7 @@ const mockContainers: Container[] = [
   {
     id: '1',
     type: 'standard-20ft',
-    name: '20ft Standard Container',
+    name: '20\' STANDARD',
     dimensions: { length: 6058, width: 2438, height: 2591 },
     maxWeight: 28230,
     availability: 'available',
@@ -15,7 +15,7 @@ const mockContainers: Container[] = [
   {
     id: '2', 
     type: 'standard-40ft',
-    name: '40ft Standard Container',
+    name: '40\' STANDARD',
     dimensions: { length: 12032, width: 2438, height: 2591 },
     maxWeight: 26700,
     availability: 'available',
@@ -24,11 +24,137 @@ const mockContainers: Container[] = [
   {
     id: '3',
     type: 'high-cube-40ft',
-    name: '40ft High Cube Container', 
+    name: '40\' HIGH-CUBE', 
     dimensions: { length: 12032, width: 2438, height: 2896 },
     maxWeight: 26700,
+    availability: 'available',
+    cost: 220
+  },
+  {
+    id: '4',
+    type: 'high-cube-45ft',
+    name: '45\' HIGH-CUBE',
+    dimensions: { length: 13716, width: 2438, height: 2896 },
+    maxWeight: 29600,
+    availability: 'available',
+    cost: 250
+  },
+  {
+    id: '5',
+    type: 'open-top-20ft',
+    name: '20\' OPEN TOP',
+    dimensions: { length: 6058, width: 2438, height: 2591 },
+    maxWeight: 28230,
+    availability: 'available',
+    cost: 140
+  },
+  {
+    id: '6',
+    type: 'open-top-40ft',
+    name: '40\' OPEN TOP',
+    dimensions: { length: 12032, width: 2438, height: 2591 },
+    maxWeight: 26700,
+    availability: 'available',
+    cost: 230
+  },
+  {
+    id: '7',
+    type: 'flatrack-20ft',
+    name: '20\' FLATRACK',
+    dimensions: { length: 6058, width: 2438, height: 2591 },
+    maxWeight: 28230,
+    availability: 'limited',
+    cost: 160
+  },
+  {
+    id: '8',
+    type: 'flatrack-40ft',
+    name: '40\' FLATRACK',
+    dimensions: { length: 12032, width: 2438, height: 2591 },
+    maxWeight: 26700,
+    availability: 'limited',
+    cost: 280
+  },
+  {
+    id: '9',
+    type: 'flatrack-collapsible-20ft',
+    name: '20\' FLATRACK COLLAPSIBLE',
+    dimensions: { length: 6058, width: 2438, height: 2591 },
+    maxWeight: 28230,
+    availability: 'limited',
+    cost: 170
+  },
+  {
+    id: '10',
+    type: 'flatrack-collapsible-40ft',
+    name: '40\' FLATRACK COLLAPSIBLE',
+    dimensions: { length: 12032, width: 2438, height: 2591 },
+    maxWeight: 26700,
+    availability: 'limited',
+    cost: 290
+  },
+  {
+    id: '11',
+    type: 'platform-20ft',
+    name: '20\' PLATFORM',
+    dimensions: { length: 6058, width: 2438, height: 300 },
+    maxWeight: 28230,
+    availability: 'limited',
+    cost: 150
+  },
+  {
+    id: '12',
+    type: 'platform-40ft',
+    name: '40\' PLATFORM',
+    dimensions: { length: 12032, width: 2438, height: 300 },
+    maxWeight: 26700,
+    availability: 'limited',
+    cost: 270
+  },
+  {
+    id: '13',
+    type: 'refrigerated-20ft',
+    name: '20\' REFRIGERATED',
+    dimensions: { length: 6058, width: 2438, height: 2591 },
+    maxWeight: 28230,
+    availability: 'available',
+    cost: 200
+  },
+  {
+    id: '14',
+    type: 'refrigerated-40ft',
+    name: '40\' REFRIGERATED',
+    dimensions: { length: 12032, width: 2438, height: 2591 },
+    maxWeight: 26700,
+    availability: 'available',
+    cost: 350
+  },
+  {
+    id: '15',
+    type: 'bulk-20ft',
+    name: '20\' BULK',
+    dimensions: { length: 6058, width: 2438, height: 2591 },
+    maxWeight: 28230,
+    availability: 'limited',
+    cost: 180
+  },
+  {
+    id: '16',
+    type: 'tank-20ft',
+    name: '20\' TANK',
+    dimensions: { length: 6058, width: 2438, height: 2591 },
+    maxWeight: 28230,
     availability: 'limited',
     cost: 220
+  },
+  {
+    id: '17',
+    type: 'custom',
+    name: 'CUSTOM CONTAINER',
+    dimensions: { length: 0, width: 0, height: 0 },
+    maxWeight: 0,
+    availability: 'available',
+    cost: 0
   }
 ]
 
@@ -36,27 +162,51 @@ const mockContainers: Container[] = [
 const mockTrucks: Truck[] = [
   {
     id: '1',
-    type: 'standard',
-    name: 'Standard Truck',
-    containerCapacity: ['standard-20ft'],
+    type: 'tautliner',
+    name: 'TAUTLINER (CUBAINSIDER)',
+    containerCapacity: ['standard-20ft', 'standard-40ft', 'high-cube-40ft'],
     availability: 'available',
     cost: 150
   },
   {
     id: '2',
-    type: 'heavy-duty', 
-    name: 'Heavy Duty Truck',
-    containerCapacity: ['standard-40ft', 'high-cube-40ft'],
+    type: 'refrigerated', 
+    name: 'REFRIGERATED TRUCK',
+    containerCapacity: ['refrigerated-20ft', 'refrigerated-40ft'],
     availability: 'available',
     cost: 200
   },
   {
     id: '3',
-    type: 'specialized',
-    name: 'Specialized Truck',
-    containerCapacity: ['standard-20ft', 'standard-40ft', 'high-cube-40ft'],
-    availability: 'unavailable',
-    cost: 300
+    type: 'isotherm',
+    name: 'ISOTHERM TRUCK',
+    containerCapacity: ['refrigerated-20ft', 'refrigerated-40ft'],
+    availability: 'available',
+    cost: 180
+  },
+  {
+    id: '4',
+    type: 'mega-trailer',
+    name: 'MEGA-TRAILER',
+    containerCapacity: ['high-cube-40ft', 'high-cube-45ft'],
+    availability: 'available',
+    cost: 250
+  },
+  {
+    id: '5',
+    type: 'jumbo',
+    name: 'JUMBO',
+    containerCapacity: ['standard-40ft', 'high-cube-40ft', 'high-cube-45ft'],
+    availability: 'available',
+    cost: 280
+  },
+  {
+    id: '6',
+    type: 'custom',
+    name: 'CUSTOM TRUCK',
+    containerCapacity: ['custom'],
+    availability: 'available',
+    cost: 0
   }
 ]
 
