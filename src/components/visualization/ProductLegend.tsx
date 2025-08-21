@@ -13,19 +13,19 @@ const PRODUCT_COLORS: Record<ProductType, string> = {
 }
 
 const PRODUCT_LABELS: Record<ProductType, string> = {
-  box: 'Box',
-  'big-bag': 'Big Bag',
-  sack: 'Sack',
-  barrel: 'Barrel',
-  roll: 'Roll',
+  box: 'Kotak',
+  'big-bag': 'Karung Besar',
+  sack: 'Karung',
+  barrel: 'Tong',
+  roll: 'Gulungan',
 }
 
 export function ProductLegend({ productTypes }: ProductLegendProps) {
   if (productTypes.length === 0) return null
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-      <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3">Product Types</h4>
+    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+      <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3">Jenis Produk</h4>
       <div className="flex flex-wrap gap-3">
         {productTypes.map((type) => (
           <div key={type} className="flex items-center gap-2">
@@ -40,7 +40,7 @@ export function ProductLegend({ productTypes }: ProductLegendProps) {
         ))}
       </div>
       <div className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-        <p>• Drag to rotate • Scroll to zoom • Right-click to pan</p>
+        <p>• Tarik untuk memutar • Gulir untuk zoom • Klik kanan untuk menggeser</p>
       </div>
     </div>
   )

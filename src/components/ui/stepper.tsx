@@ -3,18 +3,31 @@ import { LandingPage } from "@/pages/landing";
 import { ProductsPage } from "@/pages/products";
 import { ContainersTrucksPage } from "@/pages/containers-trucks";
 import { StuffingResultPage } from "@/pages/stuffing-result";
-import { useCurrentStep, useShowLanding, useGroups, useAppActions } from "@/hooks/useAppState";
+import { InteractivePackingPage } from "@/pages/interactive-packing";
+import { useCurrentStep, useShowLanding, useGroups, useAppActions, useAppMode } from "@/hooks/useAppState";
 import { stepConfiguration } from "@/constants/app";
 
 function Stepper() {
   const currentStep = useCurrentStep();
   const showLanding = useShowLanding();
   const groups = useGroups();
-  const { setStep, setShowLanding } = useAppActions();
+  const mode = useAppMode();
+  const { setStep, setShowLanding, setMode } = useAppActions();
 
   const handleGetStarted = () => {
+    setMode('batch');
     setShowLanding(false);
   };
+
+  const handleInteractiveMode = () => {
+    setMode('interactive');
+    setShowLanding(false);
+  };
+
+  // If in interactive mode, show the interactive packing page
+  if (!showLanding && mode === 'interactive') {
+    return <InteractivePackingPage />;
+  }
 
   // Validation function for step 1 (Products)
   const canProceedFromStep1 = () => {
@@ -37,10 +50,10 @@ function Stepper() {
   const getValidationMessage = () => {
     if (currentStep === 1) {
       if (groups.length === 0) {
-        return "Please add at least one product group to continue.";
+        return "Harap tambahkan setidaknya satu grup produk untuk melanjutkan.";
       }
       if (!groups.every(group => group.products.length > 0)) {
-        return "Each group must have at least one product to continue.";
+        return "Setiap grup harus memiliki setidaknya satu produk untuk melanjutkan.";
       }
     }
     return "";
@@ -75,7 +88,7 @@ function Stepper() {
   };
 
   if (showLanding) {
-    return <LandingPage onGetStarted={handleGetStarted} />;
+    return <LandingPage onGetStarted={handleGetStarted} onInteractiveMode={handleInteractiveMode} />;
   }
 
   return (
@@ -88,14 +101,14 @@ function Stepper() {
               <div
                 className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-200 
                 ${currentStep >= step.id 
-                  ? "border-primary bg-primary text-primary-foreground" 
+                  ? "border-[#3A9542] bg-[#3A9542] text-white" 
                   : "border-muted-foreground bg-background text-muted-foreground"
                 }`}
               >
                 {step.id}
               </div>
               <span className={`mt-2 text-xs font-medium text-center max-w-20 md:max-w-none ${
-                currentStep >= step.id ? "text-primary" : "text-muted-foreground"
+                currentStep >= step.id ? "text-[#3A9542]" : "text-muted-foreground"
               }`}>
                 {step.label}
               </span>
@@ -103,7 +116,7 @@ function Stepper() {
             {index !== stepConfiguration.length - 1 && (
               <div
                 className={`h-0.5 w-8 md:w-16 mx-4 transition-all duration-200 ${
-                  currentStep > step.id ? "bg-primary" : "bg-muted"
+                  currentStep > step.id ? "bg-[#3A9542]" : "bg-muted"
                 }`}
               />
             )}
@@ -134,7 +147,7 @@ function Stepper() {
               onClick={handlePrevStep}
               disabled={currentStep === 1}
             >
-              Back
+              Kembali
             </Button>
           </div>
           <Button
@@ -142,7 +155,7 @@ function Stepper() {
             disabled={currentStep === stepConfiguration.length || !canProceedFromCurrentStep()}
             className={!canProceedFromCurrentStep() ? "opacity-50 cursor-not-allowed" : ""}
           >
-            {currentStep === stepConfiguration.length ? "Complete" : "Next"}
+            {currentStep === stepConfiguration.length ? "Selesai" : "Selanjutnya"}
           </Button>
         </div>
       </div>

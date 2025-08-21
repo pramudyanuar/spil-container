@@ -8,6 +8,7 @@ interface AppState {
   usePallets: boolean
   isLoading: boolean
   error: string | null
+  mode: 'batch' | 'interactive'
 }
 
 type AppAction =
@@ -17,6 +18,7 @@ type AppAction =
   | { type: 'SET_USE_PALLETS'; payload: boolean }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
+  | { type: 'SET_MODE'; payload: 'batch' | 'interactive' }
 
 const initialState: AppState = {
   currentStep: 1,
@@ -24,7 +26,8 @@ const initialState: AppState = {
   groups: [],
   usePallets: false,
   isLoading: false,
-  error: null
+  error: null,
+  mode: 'batch'
 }
 
 function appReducer(state: AppState, action: AppAction): AppState {
@@ -41,6 +44,8 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return { ...state, isLoading: action.payload }
     case 'SET_ERROR':
       return { ...state, error: action.payload }
+    case 'SET_MODE':
+      return { ...state, mode: action.payload }
     default:
       return state
   }

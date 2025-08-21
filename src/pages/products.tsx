@@ -49,8 +49,8 @@ export function ProductsPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-2 text-muted-foreground">Loading products...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3A9542] mx-auto"></div>
+          <p className="mt-2 text-muted-foreground">Memuat produk...</p>
         </div>
       </div>
     )
@@ -82,10 +82,10 @@ export function ProductsPage() {
       </div>
 
       {groups.length === 0 && !isLoading && (
-        <div className="text-center py-16 border rounded-lg">
-          <p className="text-muted-foreground mb-4 text-lg">No product groups found</p>
-          <Button onClick={addGroup} className="bg-blue-500 hover:bg-blue-600">
-            Add Your First Group
+        <div className="text-center py-16 border rounded-lg bg-gray-50 dark:bg-gray-800">
+          <p className="text-muted-foreground mb-4 text-lg">Tidak ada grup produk ditemukan</p>
+          <Button onClick={addGroup} className="bg-[#3A9542] hover:bg-[#2d7532]">
+            Tambah Grup Pertama
           </Button>
         </div>
       )}

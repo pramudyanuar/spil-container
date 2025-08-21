@@ -34,6 +34,7 @@ interface DimensionInputProps {
   value: number
   onChange: (value: number) => void
   placeholder?: string
+  isWeight?: boolean // To differentiate weight from dimensions
 }
 
 interface ColorSelectorProps {
@@ -55,15 +56,21 @@ interface ProductRowProps {
 }
 
 // Helper component for dimension inputs
-function DimensionInput({ value, onChange, placeholder }: DimensionInputProps) {
+function DimensionInput({ value, onChange, placeholder, isWeight = false }: DimensionInputProps) {
+  const displayValue = isWeight ? value : Math.round(value / 10) // Convert mm to cm for display, except for weight
+  const handleChange = (inputValue: number) => {
+    const actualValue = isWeight ? inputValue : inputValue * 10 // Convert cm to mm for storage, except for weight
+    onChange(actualValue)
+  }
+  
   return (
     <div className="flex items-center justify-center">
       <Input
         type="number"
-        value={value || ''}
-        onChange={(e) => onChange(parseInt(e.target.value) || 0)}
+        value={displayValue || ''}
+        onChange={(e) => handleChange(parseInt(e.target.value) || 0)}
         placeholder={placeholder}
-        className="h-9 w-[75px] px-2 text-center text-sm border-gray-300"
+        className="h-9 w-[75px] px-2 text-center text-sm border-gray-300 bg-gray-700 text-white"
       />
     </div>
   )
@@ -140,8 +147,8 @@ function ProductRow({ product, groupId, onUpdateProduct, onDeleteProduct, onDupl
         <Input
           value={product.name}
           onChange={(e) => updateProduct({ name: e.target.value })}
-          className="h-9 w-full text-center border-gray-300"
-          placeholder="Product name"
+          className="h-9 w-full text-center border-gray-300 bg-gray-700 text-white"
+          placeholder="Nama produk"
         />
       </div>
 
@@ -149,25 +156,26 @@ function ProductRow({ product, groupId, onUpdateProduct, onDeleteProduct, onDupl
       <DimensionInput
         value={product.length}
         onChange={(length) => updateProduct({ length })}
-        placeholder="Length"
+        placeholder="Panjang"
       />
 
       <DimensionInput
         value={product.width}
         onChange={(width) => updateProduct({ width })}
-        placeholder="Width"
+        placeholder="Lebar"
       />
 
       <DimensionInput
         value={product.height}
         onChange={(height) => updateProduct({ height })}
-        placeholder="Height"
+        placeholder="Tinggi"
       />
 
       <DimensionInput
         value={product.weight}
         onChange={(weight) => updateProduct({ weight })}
-        placeholder="Weight"
+        placeholder="Berat"
+        isWeight={true}
       />
 
       {/* Quantity */}
@@ -176,8 +184,8 @@ function ProductRow({ product, groupId, onUpdateProduct, onDeleteProduct, onDupl
           type="number"
           value={product.quantity || ''}
           onChange={(e) => updateProduct({ quantity: parseInt(e.target.value) || 0 })}
-          className="h-9 w-[75px] px-2 text-center text-sm border-gray-300"
-          placeholder="Qty"
+          className="h-9 w-[75px] px-2 text-center text-sm border-gray-300 bg-gray-700 text-white"
+          placeholder="Jml"
         />
       </div>
 
@@ -198,9 +206,9 @@ function ProductRow({ product, groupId, onUpdateProduct, onDeleteProduct, onDupl
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-blue-500 hover:bg-blue-50"
+          className="h-8 w-8 text-[#3A9542] hover:bg-green-50"
           onClick={() => onDuplicateProduct(groupId, product.id)}
-          title="Duplicate"
+          title="Duplikat"
         >
           <Copy className="w-4 h-4" />
         </Button>
@@ -209,7 +217,7 @@ function ProductRow({ product, groupId, onUpdateProduct, onDeleteProduct, onDupl
           size="icon"
           className="h-8 w-8 text-red-500 hover:bg-red-50"
           onClick={() => onDeleteProduct(groupId, product.id)}
-          title="Delete"
+          title="Hapus"
         >
           <Trash2 className="w-4 h-4" />
         </Button>
@@ -221,17 +229,17 @@ function ProductRow({ product, groupId, onUpdateProduct, onDeleteProduct, onDupl
 // Table header component
 function TableHeader() {
   return (
-    <div className="grid grid-cols-13 gap-x-4 gap-y-2 text-sm text-gray-500 border-b pb-3 font-medium items-center">
-      <div className="text-center">Type</div>
-      <div className="col-span-3 text-center">Product Name</div>
-      <div className="text-center">Length /<br/>Diameter<br/><span className="text-xs">(mm)</span></div>
-      <div className="text-center">Width<br/><span className="text-xs">(mm)</span></div>
-      <div className="text-center">Height<br/><span className="text-xs">(mm)</span></div>
-      <div className="text-center">Weight<br/><span className="text-xs">(kg)</span></div>
-      <div className="text-center">Quantity</div>
-      <div className="text-center">Color</div>
+    <div className="grid grid-cols-13 gap-x-4 gap-y-2 text-sm text-gray-300 border-b pb-3 font-medium items-center bg-gray-800">
+      <div className="text-center">Jenis</div>
+      <div className="col-span-3 text-center">Nama Produk</div>
+      <div className="text-center">Panjang /<br/>Diameter<br/><span className="text-xs">(cm)</span></div>
+      <div className="text-center">Lebar<br/><span className="text-xs">(cm)</span></div>
+      <div className="text-center">Tinggi<br/><span className="text-xs">(cm)</span></div>
+      <div className="text-center">Berat<br/><span className="text-xs">(kg)</span></div>
+      <div className="text-center">Jumlah</div>
+      <div className="text-center">Warna</div>
       <div className="text-center">Stack</div>
-      <div className="text-center">Actions</div>
+      <div className="text-center">Aksi</div>
     </div>
   )
 }
@@ -371,7 +379,7 @@ export function ProductGroupComponent({
 
   return (
     <>
-      <div className="border rounded-xl p-6 space-y-6 shadow-sm">
+      <div className="border rounded-xl p-6 space-y-6 shadow-sm bg-gray-800 dark:bg-gray-800">
         <GroupHeader 
           group={group} 
           onDeleteGroup={onDeleteGroup} 
@@ -397,10 +405,10 @@ export function ProductGroupComponent({
           <Button 
             variant="ghost" 
             onClick={handleAddProduct}
-            className="text-blue-500 hover:bg-blue-50"
+            className="text-[#3A9542] hover:bg-green-50"
           >
             <Plus className="w-4 h-4 mr-1" />
-            Add product
+            Tambah produk
           </Button>
           
           <div className="flex items-center gap-2">

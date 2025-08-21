@@ -10,15 +10,15 @@ interface ProductsHeaderProps {
 
 export function ProductsHeader({ onAddGroup, onExport, onImport, isLoading }: ProductsHeaderProps) {
   return (
-    <div className="flex justify-between items-center">
-      <Button onClick={onAddGroup} className="bg-blue-500 hover:bg-blue-600" disabled={isLoading}>
+    <div className="flex justify-between items-center p-4 bg-gray-800 dark:bg-gray-800 rounded-lg">
+      <Button onClick={onAddGroup} className="bg-[#3A9542] hover:bg-[#2d7233]" disabled={isLoading}>
         <Plus className="w-4 h-4" />
-        Add Group
+        Tambah Grup
       </Button>
       <div className="flex gap-2">
         <Button 
           variant="outline" 
-          className="text-green-600 border-green-200"
+          className="text-[#3A9542] border-[#3A9542] hover:bg-[#3A9542] hover:text-white bg-gray-700"
           onClick={onImport}
           disabled={isLoading}
         >
@@ -27,7 +27,7 @@ export function ProductsHeader({ onAddGroup, onExport, onImport, isLoading }: Pr
         </Button>
         <Button 
           variant="outline" 
-          className="text-blue-600 border-blue-200"
+          className="text-[#3A9542] border-[#3A9542] hover:bg-[#3A9542] hover:text-white bg-gray-700"
           onClick={onExport}
           disabled={isLoading}
         >
