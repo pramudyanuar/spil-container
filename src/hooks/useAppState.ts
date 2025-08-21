@@ -10,7 +10,8 @@ export function useAppActions() {
     setGroups: (groups: ProductGroup[]) => dispatch({ type: 'SET_GROUPS', payload: groups }),
     setUsePallets: (use: boolean) => dispatch({ type: 'SET_USE_PALLETS', payload: use }),
     setLoading: (loading: boolean) => dispatch({ type: 'SET_LOADING', payload: loading }),
-    setError: (error: string | null) => dispatch({ type: 'SET_ERROR', payload: error })
+    setError: (error: string | null) => dispatch({ type: 'SET_ERROR', payload: error }),
+    setMode: (mode: 'batch' | 'interactive') => dispatch({ type: 'SET_MODE', payload: mode })
   }
 }
 
@@ -38,4 +39,9 @@ export function useUsePallets() {
 export function useLoadingState() {
   const { state } = useAppContext()
   return { isLoading: state.isLoading, error: state.error }
+}
+
+export function useAppMode() {
+  const { state } = useAppContext()
+  return state.mode
 }

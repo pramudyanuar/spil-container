@@ -10,24 +10,24 @@ export const productTypeIcons: Record<ProductType, React.ComponentType<React.SVG
 }
 
 export const productTypeLabels: Record<ProductType, string> = {
-  box: 'Box',
-  'big-bag': 'Big Bags',
-  sack: 'Sacks',
-  barrel: 'Barrels',
-  roll: 'Roll'
+  box: 'Kotak',
+  'big-bag': 'Karung Besar',
+  sack: 'Karung',
+  barrel: 'Tong',
+  roll: 'Gulungan'
 }
 
 export const colorOptions = [
-  { value: '#22c55e', name: 'Green' },
-  { value: '#ec4899', name: 'Pink' },  
-  { value: '#3b82f6', name: 'Blue' },
-  { value: '#f59e0b', name: 'Orange' },
-  { value: '#ef4444', name: 'Red' },
-  { value: '#8b5cf6', name: 'Purple' }
+  { value: '#3A9542', name: 'Hijau' },
+  { value: '#ec4899', name: 'Merah Muda' },  
+  { value: '#3b82f6', name: 'Biru' },
+  { value: '#f59e0b', name: 'Oranye' },
+  { value: '#ef4444', name: 'Merah' },
+  { value: '#8b5cf6', name: 'Ungu' }
 ]
 
 export const stepConfiguration = [
-  { id: 1, label: "Products" },
-  { id: 2, label: "Containers & Trucks" },
-  { id: 3, label: "Stuffing Result" },
+  { id: 1, label: "Produk" },
+  { id: 2, label: "Container & Truk" },
+  { id: 3, label: "Hasil Stuffing" },
 ]
